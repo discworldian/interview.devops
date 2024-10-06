@@ -26,8 +26,8 @@ type CloudProvider struct {
 func HandlePhotoUpload(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	endpoint := "localhost:9000"
-	accessKeyID := "4wg1w8OwGoBaKCHlpkxh"
-	secretAccessKey := "jHB11ESetLV5ipNo2ZqLeHHrpm1ogQqW4tlumfLQ"
+	accessKeyID := "SOME_ID"
+	secretAccessKey := "SOME_ACCESS_KEY"
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
 	AWSClientSession, err := session.NewSession(&aws.Config{
