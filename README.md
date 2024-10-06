@@ -50,14 +50,20 @@ We can also run it in Docker as such:
 
 Update the code to return a HTTP Bad Request status code if the `cloudProvider` is not set to one of `aws`, `gcp`, or `azure`.
 
+✅ See photo_upload.go, line 54 onwards (expanded after completing Task 5)
+
 ### Task 2
 
 Using a logging framework of your choice, update the logging throughout the code to use a structured log format, e.g. JSON.
 If there is a specific reason you have chosen the framework, please make note of that as a comment in the code.
 
+✅ slog seems like the simplest way to go about this. With a larger project (and more time) I would have expanded this out into a helper function.
+
 ### Task 3
 
 Update the code to only accept PNG images. If the request body is not a PNG image, return a HTTP Bad Request response.
+
+✅ See photo_upload.go, line 85 onwards.
 
 ### Task 4
 
@@ -68,9 +74,29 @@ the photo to the storage bucket.
 [MinIO](https://min.io/product/s3-compatibility) is an S3-compatible storage solution that can be run locally. If you do run such a
 solution locally, please include documentation as to how you set it up.
 
+✅ See photo_upload.go, line 85 onwards.
+
+I ran MinIO as suggested, using: 
+``` 
+docker run
+-p 9000:9000
+-p 9001:9001
+--name minio
+-v ~/minio/data:/data
+-e "MINIO_ROOT_USER=ROOTNAME"
+-e "MINIO_ROOT_PASSWORD=CHANGEME123"
+-e "MINIO_SECRET_KEY=CHANGEME123"
+-e "MINO_ACCESS_KEY=CHANGEME123"
+quay.io/minio/minio server /data 
+--console-address ":9001"
+```
+Which meant I needed to change the docker run command slightly to `docker run --network=host --rm --name devops-interview -p 8081:8081 devops-interview`. 
+
 ### Task 5
 
 Update the code so that only one photo upload can be made concurrently to any one cloud provider.
+
+✅ See photo_upload.go, line 54 onwards and line 68/69.
 
 ### Task 6 (optional)
 
@@ -79,11 +105,15 @@ Optional task, come back to after build/deploy steps if you have time.
 Images may come in rotated, see for example `rotated.png`. Implement code to check if the input image is correctly oriented
 and, if not, rotate the image to its default orientation.
 
+❎ I didn't have the time to look into this, but I would look at EXIF orientation packages in go, e.g. https://pkg.go.dev/github.com/takumakei/exif-orientation
+
 ### Task 7 (optional)
 
 Optional task, come back to after build/deploy steps if you have time.
 
 Implement unit testing for the the HTTP handler.
+
+❎ I didn't have the time to look at this.
 
 ## Build
 
@@ -97,6 +127,8 @@ devops-interview                                                      latest    
 ```
 
 Update the Dockerfile to use a multi-stage build to reduce the final binary size.
+
+✅ 
 
 ### Task 2
 
@@ -154,9 +186,13 @@ What's Next?
 
 In a larger project, the time spent in `go mod download` fetching dependencies could be much larger. Update the Dockerfile to cache the dependencies between builds.
 
+✅ 
+
 ### Task 3
 
 By default, Docker containers run using the root user. This is explicit in the image `USER root`. Update the image to use a non-root user for improved security.
+
+✅ 
 
 ### Task 4
 
@@ -164,6 +200,8 @@ Now that we have our minimal image ready to publish, update the `.github/workflo
 a Github Actions runner machine, upon merge of a pull request.
 
 *Note:* you don't have to actually publish the image to an image repository.
+
+✅ 
 
 ### Task 5 (Optional)
 
@@ -176,6 +214,8 @@ module github.com/popsa-platform/interview.devops
 As part of a code change, we have introduced a dependency on a private Go module, e.g. `module github.com/popsa-platform/other-project`. Update the Dockerfile `go mod download` directives
 to support downloading private Go modules.
 
+✅
+
 ## Deploy
 
 ### Task 1
@@ -186,6 +226,10 @@ The Terraform code should consider the following:
 * the HTTP server in our code should be reachable at a HTTPS endpoint
 * we want to be able to track the cost of running the serverless function
 
+✅
+
 ### Task 2
 
 Outline some reasons why we might choose a serverless approach over a long-running service, for example within a Kubernetes service.
+
+✅
